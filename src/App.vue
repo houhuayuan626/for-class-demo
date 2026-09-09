@@ -2,9 +2,11 @@
 import { ref } from 'vue'
 import LifecycleDemo from './components/LifecycleDemo.vue'
 import ParentChildDemo from './components/ParentChildDemo.vue'
+import ChildEventDemo from './components/ChildEventDemo.vue'
+import SiblingDemo from './components/SiblingDemo.vue'
 
-// 当前展示的 demo：生命周期 / 父子通信
-const activeDemo = ref<'lifecycle' | 'parent-child'>('parent-child')
+// 当前展示的 demo：父子通信 / 监听子组件事件 / 兄弟组件通信 / 生命周期
+const activeDemo = ref<'parent-child' | 'child-event' | 'sibling' | 'lifecycle'>('parent-child')
 
 // 通过 v-if 控制组件的挂载 / 卸载，用来演示 onBeforeUnmount 和 onUnmounted
 const show = ref<boolean>(true)
@@ -17,12 +19,22 @@ const show = ref<boolean>(true)
     <button :class="{ active: activeDemo === 'parent-child' }" @click="activeDemo = 'parent-child'">
       父子组件通信
     </button>
+    <button :class="{ active: activeDemo === 'child-event' }" @click="activeDemo = 'child-event'">
+      监听子组件事件
+    </button>
+    <button :class="{ active: activeDemo === 'sibling' }" @click="activeDemo = 'sibling'">
+      兄弟组件通信
+    </button>
     <button :class="{ active: activeDemo === 'lifecycle' }" @click="activeDemo = 'lifecycle'">
       生命周期函数
     </button>
   </nav>
 
   <ParentChildDemo v-if="activeDemo === 'parent-child'" />
+
+  <ChildEventDemo v-else-if="activeDemo === 'child-event'" />
+
+  <SiblingDemo v-else-if="activeDemo === 'sibling'" />
 
   <template v-else>
     <button class="toggle" @click="show = !show">
